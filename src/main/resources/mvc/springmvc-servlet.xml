@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--指定mvc属性配置文件-->
+    <context:property-placeholder location="classpath:config/mvc.properties"/>
+
+    <!--配置controller层组件扫描-->
+    <context:component-scan base-package="com.*" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--开启默认servlet，处理静态请求资源-->
+    <mvc:default-servlet-handler/>
+
+    <!--开启mvc注解驱动-->
+    <mvc:annotation-driven>
+        <!--配置数据转换编码-->
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="defaultCharset" value="${mvc.msg.convert.charset}"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--配置默认首页视图控制器-->
+    <mvc:view-controller path="/" view-name="${mvc.index.view}"/>
+
+    <!--配置异常解析器-->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="${mvc.error.view}"/>
+        <property name="exceptionAttribute" value="${mvc.exception.attribute}"/>
+    </bean>
+
+    <!--配置thymeleaf视图解析器-->
+    <bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="order" value="${tpl.order}"/>
+        <property name="characterEncoding" value="${tpl.character.encode}"/>
+        <property name="templateEngine">
+            <bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+                <property name="templateResolver">
+                    <bean class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+                        <property name="prefix" value="${tpl.prefix}"/>
+                        <property name="suffix" value="${tpl.suffix}"/>
+                        <property name="templateMode" value="${tpl.template.mode}"/>
+                        <property name="characterEncoding" value="${tpl.character.encode}"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!--配置文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="${file.upload.resolver.encode}"/>
+    </bean>
+</beans>

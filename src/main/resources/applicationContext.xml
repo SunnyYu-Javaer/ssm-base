@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--导入bean管理配置文件-->
+    <import resource="classpath:spring/applicationContext-beans.xml"/>
+
+    <!--导入数据源管理配置文件-->
+    <import resource="classpath:spring/applicationContext-datasource.xml"/>
+
+    <!--导入mybatis管理配置文件-->
+    <import resource="classpath:spring/applicationContext-mybatis.xml"/>
+
+    <!--导入事务管理配置文件-->
+    <import resource="classpath:spring/applicationContext-tx.xml"/>
+</beans>
